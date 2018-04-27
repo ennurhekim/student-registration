@@ -11,6 +11,51 @@
 	<link rel="icon" type="image/png" href="images/ciu_logo.png">
 
     <!-- SCRIPT -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript">
+        $("#btnPrint").live("click", function () {
+
+            var divContents = $("#dvContainer").html();
+            var printWindow = window.open('', '', 'height=600,width=960');
+            printWindow.document.write('<html><head><title>Student Registation Form</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(divContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+    </script>
+    <script>
+        function radioControl(value){
+            // Gender Control
+            if ( value == "male" ) {
+                document.getElementById('male').setAttribute("checked", "checked");
+                document.getElementById('female').removeAttribute("checked");
+            }else if( value == "female" ){
+                document.getElementById('female').setAttribute("checked", "checked");
+                document.getElementById('male').removeAttribute("checked");
+            }
+
+            // Medical Problem Control
+            if ( value == "medicalProblemYES" ) {
+                document.getElementById('medicalProblemYES').setAttribute("checked", "checked");
+                document.getElementById('medicalProblemNO').removeAttribute("checked");
+            }else if( value == "medicalProblemNO" ){
+                document.getElementById('medicalProblemNO').setAttribute("checked", "checked");
+                document.getElementById('medicalProblemYES').removeAttribute("checked");
+            }
+
+            // If has a Medical Problem
+            if ( value == "shpYES" ) {
+                document.getElementById('shpYES').setAttribute("checked", "checked");
+                document.getElementById('shpNO').removeAttribute("checked");
+            }else if( value == "shpNO" ){
+                document.getElementById('shpNO').setAttribute("checked", "checked");
+                document.getElementById('shpYES').removeAttribute("checked");
+            }
+        }
+    </script>
     <!-- CSS -->
     <style type="text/css">
     	#form1{
@@ -33,6 +78,14 @@
             background-color: #AC1F2D;
             color: white;
             min-width: 150px;
+
+            -webkit-transition: all 0.4s ease;
+            -moz-transition: all 0.4s ease;
+            -o-transition: all 0.4s ease;
+            transition: all 0.4s ease;
+        }
+        #btnPrint:hover{
+            background-color: #c43c48;
         }
     </style>
 </head>
@@ -51,39 +104,39 @@
 	        	<table width="100%" style="text-align: left;" border="1">
 	        		<tr>
 	        			<th style="padding: 5px;">Surname:</th>
-	        			<td style="padding: 5px;" colspan="5"><input type="text" style="padding: 5px;width: 100%;"></td>
+	        			<td style="padding: 5px;" colspan="5"><input type="text" ng-model="surname" value="{{surname}}" style="padding: 5px;width: 100%;"></td>
 	        		</tr>
 	        		<tr>
 	        			<th style="padding: 5px;">First Name:</th>
-	        			<td style="padding: 5px;"><input type="text" style="padding: 5px;width: 100%;"></td>
+	        			<td style="padding: 5px;"><input type="text" ng-model="firstname" value="{{firstname}}" style="padding: 5px;width: 100%;"></td>
 	        			<td colspan="3" align="center">Birth Date</td>
 	        		</tr>
 	        		<tr>
 	        			<th style="padding: 5px;">Middle Name:</th>
-	        			<td style="padding: 5px;"><input type="text" style="padding: 5px;width: 100%;"></td>
-	        			<td align="center"><input type="text" style="padding: 5px;max-width: 50px;text-align: center;" placeholder="DD"></td>
-	        			<td align="center"><input type="text" style="padding: 5px;max-width: 50px;text-align: center;" placeholder="MM"></td>
-	        			<td align="center"><input type="text" style="padding: 5px;max-width: 50px;text-align: center;" placeholder="YYYY"></td>
+	        			<td style="padding: 5px;"><input type="text" ng-model="middlename" value="{{middlename}}" style="padding: 5px;width: 100%;"></td>
+	        			<td align="center"><input type="number" ng-model="birthday" value="{{birthday}}" style="padding: 5px;width: 70px;text-align: center;" placeholder="DD" min="1" max="31"></td>
+	        			<td align="center"><input type="number" ng-model="birthmonth" value="{{birthmonth}}" style="padding: 5px;width: 70px;text-align: center;" placeholder="MM" min="1" max="12"></td>
+	        			<td align="center"><input type="number" ng-model="birthyear" value="{{birthyear}}" style="padding: 5px;width: 70px;text-align: center;" placeholder="YYYY" min="1905" max="2018"></td>
 	        		</tr>
 	        		<tr>
 	        			<th style="padding: 5px;">Gender:</th>
 	        			<td colspan="4" style="padding: 5px;">
 	        				<label>
-	        					<input type="radio" name="gender" value="male" checked="checked"> Male
+	        					<input type="radio" name="gender" value="male" id="male" onclick="radioControl('male')"> Male
 	        				</label>
 	        				<label>
-	        					<input type="radio" name="gender" value="male"> Female
+	        					<input type="radio" name="gender" value="female" id="female" onclick="radioControl('female')"> Female
 	        				</label>
 	        			</td>
 	        		</tr>
 	        		<tr>
 	        			<th style="padding: 5px;">Address</th>
 	        			<td style="padding: 5px;">
-	        				<input style="width: 100%;padding: 5px;"></input>
+	        				<input type="text" style="width: 100%;padding: 5px;" ng-model="address" value="{{address}}">
 	        			</td>
 	        			<th style="padding: 5px;">City</th>
 	        			<td style="padding: 5px;" colspan="2">
-	        				<input style="width: 100%;padding: 5px;"></input>
+	        				<input type="text" style="width: 100%;padding: 5px;" ng-model="city" value="{{city}}">
 	        			</td>
 	        		</tr>
 	        	</table>
@@ -97,25 +150,25 @@
 
                             <p>Does your child have any medical or physical conditions that may affect his/her attendance at school?</p>
                             <label>
-                                <input type="radio" name="medicalProblem"> Yes
+                                <input type="radio" name="medicalProblem" id="medicalProblemYES" onclick="radioControl('medicalProblemYES')"> Yes
                             </label>
                             <label>
-                                <input type="radio" name="medicalProblem" checked="checked"> No
+                                <input type="radio" name="medicalProblem" id="medicalProblemNO" onclick="radioControl('medicalProblemNO')"> No
                             </label>
                         </th>
                     </tr>
                     <tr>
                         <td style="padding: 5px;">If yes, please give a brief description</td>
-                        <td style="padding: 5px;"><input type="text" style="width: 100%;padding: 5px;"></td>
+                        <td style="padding: 5px;"><input type="text" ng-model="ifyes" value="{{ifyes}}" style="width: 100%;padding: 5px;"></td>
                     </tr>
                     <tr>
                         <td style="padding: 5px;">Have you completed the Student Health Plan?</td>
                         <td style="padding: 5px;">
                             <label>
-                                <input type="radio" name="shp" checked="checked"> Yes
+                                <input type="radio" name="shp" id="shpYES" onclick="radioControl('shpYES')"> Yes
                             </label>
                             <label>
-                                <input type="radio" name="shp"> No
+                                <input type="radio" name="shp" id="shpNO" onclick="radioControl('shpNO')"> No
                             </label>
                         </td>
                     </tr>
@@ -127,44 +180,45 @@
                     <tr>
                         <th style="padding: 5px;">Name of Middle School</th>
                         <th style="padding: 5px;">Grade Completed</th>
-                        <th style="padding: 5px;" rowspan="2" align="center">Start Date <br>
-                            <input type="text" placeholder="DD" style="padding: 5px; width: 50px;">
-                            <input type="text" placeholder="MM" style="padding: 5px; width: 40px;">
-                            <input type="text" placeholder="YYYY" style="padding: 5px; width: 40px;">
+                        <th style="padding: 0px;" rowspan="2" align="center">Start Date <br>
+                            <input type="number" ng-model="schoolstartday" value="{{schoolstartday}}" placeholder="DD" min="1" max="31" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;"  >
+                            <input type="number" ng-model="schoolstartmonth" value="{{schoolstartmonth}}" placeholder="MM" min="1" max="12" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolstartyear" value="{{schoolstartyear}}" placeholder="YYYY" max="2018" style="padding: 5px; width: 58px;font-size: 11px;padding-right: 2px;">
                         </th>
-                        <th style="padding: 5px;" colspan="2" rowspan="2" align="center">Finish Date <br>
-                            <input type="text" placeholder="YYYY" style="padding: 5px; width: 50px;">
-                            <input type="text" placeholder="DD" style="padding: 5px; width: 40px;">
-                            <input type="text" placeholder="MM" style="padding: 5px; width: 40px;">
+                        <th style="padding: 0px;" colspan="2" rowspan="2" align="center">Finish Date <br>
+                            <input type="number" ng-model="schoolfinishday" value="{{schoolfinishday}}" placeholder="DD" min="1" max="31" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolfinishmonth" value="{{schoolfinishmonth}}" placeholder="MM" min="1" max="12" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolfinishyear" value="{{schoolfinishyear}}" placeholder="YYYY" max="2018" style="padding: 5px; width: 58px;font-size: 11px;padding-right: 2px;">
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding: 5px;"><input type="text" style="padding: 5px; width: 100%;"></td>
-                        <td style="padding: 5px;"><input type="text" style="padding: 5px; width: 100%;"></td>
+                        <td style="padding: 5px;"><input type="text" ng-model="nameofschool" value="{{nameofschool}}" style="padding: 5px; width: 100%;"></td>
+                        <td style="padding: 5px;"><input type="text" ng-model="gradeEntering" value="{{gradeEntering}}" style="padding: 5px; width: 100%;"></td>
                     </tr>
                     <tr>
                         <th style="padding: 5px;">Name of High School</th>
                         <th style="padding: 5px;">Grade Completed</th>
-                        <th style="padding: 5px;" rowspan="2" align="center">Start Date <br>
-                            <input type="text" placeholder="DD" style="padding: 5px; width: 50px;">
-                            <input type="text" placeholder="MM" style="padding: 5px; width: 40px;">
-                            <input type="text" placeholder="YYYY" style="padding: 5px; width: 40px;">
+                        <th style="padding: 0px;" rowspan="2" align="center">Start Date <br>
+                            <input type="number" ng-model="schoolstartday2" value="{{schoolstartday2}}" placeholder="DD" min="1" max="31" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolstartmonth2" value="{{schoolstartmonth2}}" placeholder="MM" min="1" max="12" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolstartyear2" value="{{schoolstartyear2}}" placeholder="YYYY" max="2018" style="padding: 5px; width: 58px;font-size: 11px;padding-right: 2px;">
                         </th>
-                        <th style="padding: 5px;" colspan="2" rowspan="2" align="center">Finish Date <br>
-                            <input type="text" placeholder="DD" style="padding: 5px; width: 50px;">
-                            <input type="text" placeholder="MM" style="padding: 5px; width: 40px;">
-                            <input type="text" placeholder="YYYY" style="padding: 5px; width: 40px;">
+                        <th style="padding: 0px;" colspan="2" rowspan="2" align="center">Finish Date <br>
+                            <input type="number" ng-model="schoolfinishday2" value="{{schoolfinishday2}}" placeholder="DD" min="1" max="31" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolfinishmonth2" value="{{schoolfinishmonth2}}" placeholder="MM" min="1" max="12" style="padding: 5px; width: 40px;font-size: 11px;padding-right: 2px;">
+                            <input type="number" ng-model="schoolfinishyear2" value="{{schoolfinishyear2}}" placeholder="YYYY" max="2018" style="padding: 5px; width: 58px;font-size: 11px;padding-right: 2px;">
                         </th>
                     </tr>
                     <tr>
-                        <td style="padding: 5px;"><input type="text" style="padding: 5px; width: 100%;"></td>
-                        <td style="padding: 5px;"><input type="text" style="padding: 5px; width: 100%;"></td>
+                        <td style="padding: 5px;"><input type="text" ng-model="nameofhighschool" value="{{nameofhighschool}}" style="padding: 5px; width: 100%;"></td>
+                        <td style="padding: 5px;"><input type="text" ng-model="gradeEnteringofhighsc" value="{{gradeEnteringofhighsc}}" style="padding: 5px; width: 100%;"></td>
                     </tr>
                 </table>
 	        </div>
 	    </div>
         <br>
-	    <input type="button" value="Print PDF" id="btnPrint" />
+	    <input type="button" value="Save as PDF" id="btnPrint" style="margin-bottom: 20px;" />
     </form>
+
 </body>
 </html>
